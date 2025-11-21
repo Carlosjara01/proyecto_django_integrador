@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'core:product_list' %}">Tienda</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{% url 'core:product_list' %}">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'core:order_list' %}">Pedidos</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="exportDropdown" role="button" data-bs-toggle="dropdown">Export</a>
+          <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+            <li><a class="dropdown-item" href="{% url 'core:export_csv' %}">CSV</a></li>
+            <li><a class="dropdown-item" href="{% url 'core:export_pdf' %}">PDF</a></li>
+          </ul>
+        </li>
+      </ul>
+
+      <form class="d-flex me-2" method="get" action="{% url 'core:search' %}">
+        <input class="form-control me-2" type="search" name="q" value="{{ request.GET.q }}" placeholder="Buscar...">
+        <button class="btn btn-outline-light" type="submit">Buscar</button>
+      </form>
+
+      <ul class="navbar-nav">
+        {% if user.is_authenticated %}
+          <li class="nav-item d-flex align-items-center pe-2">
+            <span class="text-white me-2">Hola, {{ user.get_short_name|default:user.username }}</span>
+          </li>
+
+          <!-- Opción A: botón visible que luce como enlace y envía POST -->
+          <li class="nav-item">
+            <form id="logout-form" action="{% url 'core:logout' %}" method="post" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="nav-link btn btn-link p-0" style="color:inherit; text-decoration:none;">
+                Cerrar sesión
+              </button>
+            </form>
+          </li>
+
+          <!-- Opción B (alternativa): enlace que dispara un formulario oculto -->
+          {# 
+          <li class="nav-item">
+            <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form-hidden').submit();">Cerrar sesión</a>
+            <form id="logout-form-hidden" action="{% url 'core:logout' %}" method="post" style="display:none;">
+              {% csrf_token %}
+            </form>
+          </li>
+          #}
+
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="{% url 'core:login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'core:register' %}">Register</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

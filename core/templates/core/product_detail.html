@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% block title %}{{ product.name }} - Producto{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.description|linebreaksbr }}</p>
+    <dl class="row">
+      <dt class="col-sm-3">SKU</dt><dd class="col-sm-9">{{ product.sku }}</dd>
+      <dt class="col-sm-3">Precio</dt><dd class="col-sm-9">{{ product.price }}</dd>
+      <dt class="col-sm-3">Stock</dt><dd class="col-sm-9">{{ product.stock }}</dd>
+    </dl>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        {% if user.is_staff %}
+          <a class="btn btn-primary w-100 mb-2" href="{% url 'core:product_edit' product.pk %}">Editar</a>
+
+          <!-- Formulario POST para eliminar (DeleteView acepta POST para confirmar borrado) -->
+          <form action="{% url 'core:product_delete' product.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="btn btn-outline-danger w-100"
+              onclick="return confirm('¿Seguro que quieres eliminar este producto? Esta acción no se puede deshacer.');"
+            >
+              Eliminar
+            </button>
+          </form>
+        {% else %}
+          <p class="text-muted mb-0">No tenés permisos para editar o eliminar este producto.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

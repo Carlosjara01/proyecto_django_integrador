@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% block title %}Pedido #{{ order.id }}{% endblock %}
+
+{% block content %}
+<h1>Pedido #{{ order.id }}</h1>
+<p>Cliente: {{ order.customer }}</p>
+<p>Fecha: {{ order.created_at }}</p>
+<p>Total: {{ order.total }}</p>
+
+<h3>Items</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Producto</th>
+      <th>Cantidad</th>
+      <th>Precio</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in order.items.all %}
+    <tr>
+      <td>{{ item.product.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.price }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="btn btn-secondary" href="{% url 'core:order_list' %}">Volver</a>
+{% endblock %}

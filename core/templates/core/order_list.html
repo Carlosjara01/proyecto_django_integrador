@@ -1,0 +1,37 @@
+{% extends 'core/base.html' %}
+{% block title %}Pedidos{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Pedidos</h1>
+  <a class="btn btn-success" href="{% url 'core:order_create' %}">Nuevo Pedido</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Cliente</th>
+      <th>Fecha</th>
+      <th>Total</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+    <tr>
+      <td>{{ order.id }}</td>
+      <td>{{ order.customer }}</td>
+      <td>{{ order.created_at|date:'SHORT_DATETIME_FORMAT' }}</td>
+      <td>{{ order.total }}</td>
+      <td class="text-end">
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'core:order_detail' order.pk %}">Ver</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'core:order_edit' order.pk %}">Editar</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="5">No hay pedidos.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

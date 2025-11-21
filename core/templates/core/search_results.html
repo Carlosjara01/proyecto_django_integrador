@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% block title %}Resultados de búsqueda{% endblock %}
+
+{% block content %}
+<h1>Resultados para "{{ request.GET.q }}"</h1>
+
+{% if products %}
+  <h3>Productos</h3>
+  <ul class="list-group mb-3">
+    {% for p in products %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <a href="{% url 'core:product_detail' p.pk %}">{{ p.name }}</a><br>
+          <small>SKU: {{ p.sku }}</small>
+        </div>
+        <span>{{ p.price }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if orders %}
+  <h3>Pedidos</h3>
+  <ul class="list-group mb-3">
+    {% for o in orders %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <a href="{% url 'core:order_detail' o.pk %}">Pedido #{{ o.id }}</a><br>
+          <small>Cliente: {{ o.customer }}</small>
+        </div>
+        <span>{{ o.total }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if not products and not orders %}
+  <div class="alert alert-info">No se encontraron resultados.</div>
+{% endif %}
+
+<a class="btn btn-secondary" href="{% url 'core:product_list' %}">Volver</a>
+{% endblock %}

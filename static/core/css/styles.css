@@ -1,0 +1,4 @@
+body { padding-bottom: 40px; }
+@media (max-width: 576px) {
+  .container { padding-left: 6px; padding-right: 6px; }
+}
